@@ -1,15 +1,23 @@
 import ast
 
-def get_function_names(code):
+def get_function_details(code):
     tree = ast.parse(code)
 
-    functions = []
+    function_details = {}
 
     for node in ast.walk(tree):
         if isinstance(node, ast.FunctionDef):
-            functions.append(node.name)
+            functions.append(node.name) 
+            arguments = []
+            details={}
+            for arg in node.args.args:
+                arguments.append(arg.arg)
+            details['arguments'] = arguments
+            details['lineno'] = node.lineno
+            function_details[node.name]=details
 
-    return functions
+
+    return function_details
 
 
 if __name__ == "__main__":
