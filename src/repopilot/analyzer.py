@@ -4,16 +4,18 @@ def get_function_details(code):
     tree = ast.parse(code)
 
     function_details = {}
-
+    lines=code.splitlines()
     for node in ast.walk(tree):
         if isinstance(node, ast.FunctionDef):
-            functions.append(node.name) 
             arguments = []
             details={}
             for arg in node.args.args:
                 arguments.append(arg.arg)
             details['arguments'] = arguments
             details['lineno'] = node.lineno
+            source_lines=lines[node.lineno-1:node.end_lineno]
+            source="\n".join(source_lines)
+            details['source'] = source
             function_details[node.name]=details
 
 
@@ -29,5 +31,5 @@ def subtract(a, b):
     return a - b
 """
 
-    result = get_function_names(code)
+    result = get_function_details(code)
     print(result)
